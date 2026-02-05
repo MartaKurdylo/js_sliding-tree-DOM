@@ -1,34 +1,34 @@
-'use strict';
-
 const tree = document.querySelector('.tree');
 
-// li, які мають вкладений ul
-const liItems = tree.querySelectorAll('li:has(> ul)');
+// Знаходимо всі пункти, що мають підпункти
+const itemsWithChildren = tree.querySelectorAll('li:has(> ul)');
 
-liItems.forEach((li) => {
+// Для кожного такого пункту:
+itemsWithChildren.forEach((item) => {
+  // 1. Обгортаємо текст в span
   const span = document.createElement('span');
 
-  span.textContent = li.firstChild.textContent.trim();
-  li.firstChild.replaceWith(span);
+  span.textContent = item.firstChild.textContent.trim();
+  item.firstChild.replaceWith(span);
 
-  // 🔥 ВАЖЛИВО: ховаємо ul одразу
-  const childUl = li.querySelector(':scope > ul');
+  // 2. Ховаємо підпункти
+  const subList = item.querySelector('ul');
 
-  childUl.classList.add('hidden');
+  subList.classList.add('hidden');
 });
 
-// Делегування кліку
+// Обробляємо кліки
 tree.addEventListener('click', (e) => {
+  // Перевіряємо, чи клікнули на span
   if (e.target.tagName !== 'SPAN') {
     return;
   }
 
-  const li = e.target.closest('li');
-  const childUl = li.querySelector(':scope > ul');
+  // Знаходимо підпункти
+  const subList = e.target.nextElementSibling;
 
-  if (!childUl) {
-    return;
+  // Якщо вони є — розгортаємо/згортаємо
+  if (subList) {
+    subList.classList.toggle('hidden');
   }
-
-  childUl.classList.toggle('hidden');
 });
