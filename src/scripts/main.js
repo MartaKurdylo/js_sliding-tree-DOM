@@ -15,8 +15,6 @@ allItems.forEach((item) => {
   span.textContent = item.firstChild.textContent.trim();
   item.firstChild.replaceWith(span);
 
-  subList.hidden = true;
-
   span.addEventListener('click', () => {
     subList.hidden = !subList.hidden;
   });
