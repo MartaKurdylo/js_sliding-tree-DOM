@@ -1,34 +1,23 @@
+'use strict';
+
 const tree = document.querySelector('.tree');
+const allItems = tree.querySelectorAll('li');
 
-// Знаходимо всі пункти, що мають підпункти
-const itemsWithChildren = tree.querySelectorAll('li:has(> ul)');
+allItems.forEach((item) => {
+  const subList = item.querySelector('ul');
 
-// Для кожного такого пункту:
-itemsWithChildren.forEach((item) => {
-  // 1. Обгортаємо текст в span
+  if (!subList) {
+    return;
+  }
+
   const span = document.createElement('span');
 
   span.textContent = item.firstChild.textContent.trim();
   item.firstChild.replaceWith(span);
 
-  // 2. Ховаємо підпункти
-  const subList = item.querySelector('ul');
+  subList.hidden = true;
 
-  subList.classList.add('hidden');
-});
-
-// Обробляємо кліки
-tree.addEventListener('click', (e) => {
-  // Перевіряємо, чи клікнули на span
-  if (e.target.tagName !== 'SPAN') {
-    return;
-  }
-
-  // Знаходимо підпункти
-  const subList = e.target.nextElementSibling;
-
-  // Якщо вони є — розгортаємо/згортаємо
-  if (subList) {
-    subList.classList.toggle('hidden');
-  }
+  span.addEventListener('click', () => {
+    subList.hidden = !subList.hidden;
+  });
 });
